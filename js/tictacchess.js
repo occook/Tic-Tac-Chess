@@ -92,7 +92,7 @@ ALSO THE ROOK CAN MOVE TO SQUARES WITH THE SAME X%4 (CAN BE 0,1,2,3)
 */
 
 function rookMoves(el, id){
-    if (id>15) $('.board').addClass('possible');
+    if (id>15) $('.board').addClass('possible'); //Be able to place rook anywhere to start
     else {
 
       //Deal with possible squares in same column.
@@ -125,8 +125,59 @@ function rookMoves(el, id){
     }
 }
 
-function bishopMoves(id){
-    $('th.board').addClass('possible');
+function bishopMoves(id){ //Will be extremely similar to rookMoves
+    if (id>15) $('.board').addClass('possible');
+    else{
+      var rowCheckBase = Math.floor(id/4); //This will help us with wrap around errors
+      var rowCheck = rowCheckBase;
+
+      //Down right
+      var counter = id+5;
+      while (counter<16 && !($('#'+counter).hasClass('hasPiece'))){
+        if (Math.floor(counter/4)-1 != rowCheck) break;
+        else{
+          rowCheck++;
+          $('#'+counter).addClass('possible');
+        }
+        counter+=5;
+      }
+
+      //Up left
+      rowCheck = rowCheckBase;
+      counter = id-5;
+      while(counter>-1 && !($('#'+counter).hasClass('hasPiece'))){
+        if (Math.floor(counter/4)+1 != rowCheck) break;
+        else{
+          rowCheck--;
+          $('#'+counter).addClass('possible');
+        }
+        counter-=5;
+      }
+
+      //Down left
+      rowCheck = rowCheckBase;
+      counter = id+3;
+      while(counter<16 && !($('#'+counter).hasClass('hasPiece'))){
+        if (Math.floor(counter/4) == rowCheck) break;
+        else{
+          rowCheck++;
+          $('#'+counter).addClass('possible');
+        }
+        counter+=3;
+      }
+
+      //Up right
+      rowCheck = rowCheckBase;
+      counter = id-3;
+      while(counter>-1 && !($('#'+counter).hasClass('hasPiece'))){
+        if (Math.floor(counter/4) == rowCheck) break;
+        else{
+          rowCheck--;
+          $('#'+counter).addClass('possible');
+        }
+        counter-=3;
+      }
+    }
 }
 
 function knightMoves(id){
