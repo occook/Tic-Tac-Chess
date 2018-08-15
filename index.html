@@ -1,0 +1,74 @@
+<html>
+    <head>
+      <title>
+        Tic Tac Chess
+      </title>
+      <link rel="stylesheet" href="styling.css">
+    </head>
+
+    <body>
+      <h1>Tic Tac Chess!</h1>
+      <p>Welcome to Tic Tac Chess. This is a work in progress, and is meant to increase my skills in frontend development.</p>
+
+        <div id="top">
+          <table>
+            <tr>
+              <th id="16" class="holder"></th>
+              <th id="17" class="holder"></th>
+              <th id="18" class="holder"></th>
+              <th id="19" class="holder"></th>
+            </tr>
+          </table>
+        </div>
+
+        <div id="board">
+          <table>
+            <tr>
+              <th id="0" class="odd board"></th>
+              <th id="1" class="even board"></th>
+              <th id="2" class="odd board"></th>
+              <th id="3" class="even board"></th>
+            </tr>
+
+            <tr>
+              <th id="4" class="even board"></th>
+              <th id="5" class="odd board"></th>
+              <th id="6" class="even board"></th>
+              <th id="7" class="odd board"></th>
+            </tr>
+
+            <tr>
+              <th id="8" class="odd board"></th>
+              <th id="9" class="even board"></th>
+              <th id="10" class="odd board"></th>
+              <th id="11" class="even board"></th>
+            </tr>
+
+            <tr>
+              <th id="12" class="even board"></th>
+              <th id="13" class="odd board"></th>
+              <th id="14" class="even board"></th>
+              <th id="15" class="odd board"></th>
+            </tr>
+          </table>
+        </div>
+
+        <div id="bottom">
+          <table>
+            <tr>
+              <th id="20" class="holder"></th>
+              <th id='21' class="holder"></th>
+              <th id="22" class="holder"></th>
+              <th id="23" class="holder"></th>
+          </table>
+        </div>
+
+        <button id="restart" type="button">Restart</button>
+        <button id="delete" type="button">Delete</button>
+
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <script src="js/tictacchess.js"></script>
+    </body>
+
+
+</html>
