@@ -92,16 +92,36 @@ ALSO THE ROOK CAN MOVE TO SQUARES WITH THE SAME X%4 (CAN BE 0,1,2,3)
 */
 
 function rookMoves(el, id){
-    var i;
     if (id>15) $('.board').addClass('possible');
     else {
-      var temp1 = id%4;
-      for (i=0; i<16; i++){
-        var temp2 = i%4;
-        if (temp1 == temp2 && i!=id) $('#'+i).addClass('possible');
+
+      //Deal with possible squares in same column.
+      //First we check up. If we run into square that has a piece, we stop because we can't go through that piece.
+      var counter = id-4;
+      while (counter>=0 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+        counter-=4;
+      }
+      //Now we do the same but for down.
+      counter = id+4;
+      while (counter<16 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+        counter+=4;
       }
 
-
+      //Deal with possible squares in same row.
+      //First we will check left. We will stop when counter%4=3
+      counter = id-1;
+      while(counter%4!=3 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+        counter-=1;
+      }
+      //Now we will check right.
+      counter = id+1;
+      while(counter%4!=0 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+        counter+=1;
+      }
     }
 }
 
