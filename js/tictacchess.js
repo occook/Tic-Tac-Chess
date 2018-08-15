@@ -112,13 +112,13 @@ function rookMoves(el, id){
       //Deal with possible squares in same row.
       //First we will check left. We will stop when counter%4=3
       counter = id-1;
-      while(counter%4!=3 && !($('#'+counter).hasClass('hasPiece'))){
+      while((counter+4)%4!=3 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
-        counter-=1;
+        counter--;
       }
       //Now we will check right.
       counter = id+1;
-      while(counter%4!=0 && !($('#'+counter).hasClass('hasPiece'))){
+      while((counter+4)%4!=0 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
         counter+=1;
       }
