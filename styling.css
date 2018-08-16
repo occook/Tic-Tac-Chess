@@ -61,3 +61,10 @@ table{
 .red{
   color: red;
 }
+
+.possible.even{
+  background-color: #79a0e0
+}
+.possible.odd{
+  background-color: #c2d2ed
+}
