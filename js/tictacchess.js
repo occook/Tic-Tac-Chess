@@ -112,19 +112,21 @@ function rookMoves(el, id){
       //Deal with possible squares in same row.
       //First we will check left. We will stop when counter%4=3
       counter = id-1;
-      while(counter%4!=3 && !($('#'+counter).hasClass('hasPiece'))){
+      while((counter+4)%4!=3 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
         counter-=1;
       }
       //Now we will check right.
       counter = id+1;
-      while(counter%4!=0 && !($('#'+counter).hasClass('hasPiece'))){
+      while((counter+4)%4!=0 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
         counter+=1;
       }
     }
 }
 
+
+//Creates possible squares for bishop moves.
 function bishopMoves(id){ //Will be extremely similar to rookMoves
     if (id>15) $('.board').addClass('possible');
     else{
@@ -180,8 +182,44 @@ function bishopMoves(id){ //Will be extremely similar to rookMoves
     }
 }
 
+//Creates possible squares for knight moves.
 function knightMoves(id){
-    $('th.board').addClass('possible');
+    if (id>15) $('.board').addClass('possible');
+    else{
+      var counter;
+      if (id-9>-1 && Math.floor(id/4)-Math.floor((id-9)/4)==2){
+        counter = id-9;
+        $('#'+counter).addClass('possible');
+      }
+      if (id-7>-1 && Math.floor(id/4)-Math.floor((id-7)/4)==2){
+        counter = id-7;
+        $('#'+counter).addClass('possible');
+      }
+      if (id-6>-1 && Math.floor(id/4)-Math.floor((id-6)/4)==1){
+        counter = id-6;
+        $('#'+counter).addClass('possible');
+      }
+      if (id-2>-1 && Math.floor(id/4)-Math.floor((id-2)/4)==1){
+        counter = id-2;
+        $('#'+counter).addClass('possible');
+      }
+      if (id+9<16 && Math.floor(id/4)-Math.floor((id+9)/4)==-2){
+        counter = id+9;
+        $('#'+counter).addClass('possible');
+      }
+      if (id+7<16 && Math.floor(id/4)-Math.floor((id+7)/4)==-2){
+        counter = id+7;
+        $('#'+counter).addClass('possible');
+      }
+      if (id+6<16 && Math.floor(id/4)-Math.floor((id+6)/4)==-1){
+        counter = id+6;
+        $('#'+counter).addClass('possible');
+      }
+      if (id+2<16 && Math.floor(id/4)-Math.floor((id+2)/4)==-1){
+        counter = id+2;
+        $('#'+counter).addClass('possible');
+      }
+    }
 }
 
 function pawnMoves(id){
