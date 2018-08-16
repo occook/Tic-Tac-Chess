@@ -75,7 +75,7 @@ function possibleSquares(el,id){
       pawnMoves(id);
   }
   if (imgID.includes('R')){
-      rookMoves(el, id);
+      rookMoves(id);
   }
   if (imgID.includes('N')){
       knightMoves(id);
@@ -91,7 +91,7 @@ ROOK MOVES: ROOK CAN MOVE IN ROW AND COLUMN. THIS MEANS THAT ROOK CAN MOVE WITHI
 ALSO THE ROOK CAN MOVE TO SQUARES WITH THE SAME X%4 (CAN BE 0,1,2,3)
 */
 
-function rookMoves(el, id){
+function rookMoves(id){
     if (id>15) $('.board').addClass('possible'); //Be able to place rook anywhere to start
     else {
 
@@ -187,36 +187,36 @@ function knightMoves(id){
     if (id>15) $('.board').addClass('possible');
     else{
       var counter;
-      if (id-9>-1 && Math.floor(id/4)-Math.floor((id-9)/4)==2){
-        counter = id-9;
+      counter = id-9;
+      if (id-9>-1 && Math.floor(id/4)-Math.floor((id-9)/4)==2 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
       }
-      if (id-7>-1 && Math.floor(id/4)-Math.floor((id-7)/4)==2){
-        counter = id-7;
+      counter = id-7;
+      if (id-7>-1 && Math.floor(id/4)-Math.floor((id-7)/4)==2 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
       }
-      if (id-6>-1 && Math.floor(id/4)-Math.floor((id-6)/4)==1){
-        counter = id-6;
+      counter = id-6;
+      if (id-6>-1 && Math.floor(id/4)-Math.floor((id-6)/4)==1 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
       }
-      if (id-2>-1 && Math.floor(id/4)-Math.floor((id-2)/4)==1){
-        counter = id-2;
+      counter = id-2;
+      if (id-2>-1 && Math.floor(id/4)-Math.floor((id-2)/4)==1 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
       }
-      if (id+9<16 && Math.floor(id/4)-Math.floor((id+9)/4)==-2){
-        counter = id+9;
+      counter = id+9;
+      if (id+9<16 && Math.floor(id/4)-Math.floor((id+9)/4)==-2 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
       }
-      if (id+7<16 && Math.floor(id/4)-Math.floor((id+7)/4)==-2){
-        counter = id+7;
+      counter = id+7;
+      if (id+7<16 && Math.floor(id/4)-Math.floor((id+7)/4)==-2 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
       }
-      if (id+6<16 && Math.floor(id/4)-Math.floor((id+6)/4)==-1){
-        counter = id+6;
+      counter = id+6;
+      if (id+6<16 && Math.floor(id/4)-Math.floor((id+6)/4)==-1 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
       }
-      if (id+2<16 && Math.floor(id/4)-Math.floor((id+2)/4)==-1){
-        counter = id+2;
+      counter = id+2;
+      if (id+2<16 && Math.floor(id/4)-Math.floor((id+2)/4)==-1 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
       }
     }
