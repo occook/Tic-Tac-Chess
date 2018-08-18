@@ -29,7 +29,7 @@ function selectPiece(){
     var id = parseInt(this.id);
 
     // If another piece is already selected, make that piece unselected and select the new piece, get events from moveSelectedPiece().
-    
+
     if ($('.selected').length == 1) {
       if(!($(this).hasClass('selected'))) {
         $('.board').off();
@@ -61,6 +61,18 @@ function moveSelectedPiece(el,id){
   possibleSquares(el,id);
   $('th.hasPiece').on('click', selectPiece());
   $('th.possible').not('.hasPiece').on('click', function(){
+
+    //Pawn placement
+    var imgID = el.attr('id');
+    if (id>15 && imgID.includes('P')){
+      if (imgID.includes('w') && this.id>3){
+        el.addClass('up');
+      }
+      if (imgID.includes('b') && this.id>11){
+        el.addClass('up');
+      }
+    }
+
     $(this).addClass('hasPiece');
     $(this).prepend(el);
     $('th').off();
@@ -97,7 +109,7 @@ ALSO THE ROOK CAN MOVE TO SQUARES WITH THE SAME X%4 (CAN BE 0,1,2,3)
 
 function rookMoves(el, id){
     $('.possible').removeClass('possible');
-    if (id>15) $('.board').addClass('possible'); //Be able to place rook anywhere to start
+    if (id>15) $('.board').not('.hasPiece').addClass('possible'); //Be able to place rook anywhere to start
     else {
 
       //Deal with possible squares in same column.
@@ -134,7 +146,7 @@ function rookMoves(el, id){
 //Creates possible squares for bishop moves.
 function bishopMoves(el, id){ //Will be extremely similar to rookMoves
     $('.possible').removeClass('possible');
-    if (id>15) $('.board').addClass('possible');
+    if (id>15) $('.board').not('.hasPiece').addClass('possible');
     else{
       var rowCheckBase = Math.floor(id/4); //This will help us with wrap around errors
       var rowCheck = rowCheckBase;
@@ -191,7 +203,7 @@ function bishopMoves(el, id){ //Will be extremely similar to rookMoves
 //Creates possible squares for knight moves.
 function knightMoves(el, id){
     $('.possible').removeClass('possible');
-    if (id>15) $('.board').addClass('possible');
+    if (id>15) $('.board').not('.hasPiece').addClass('possible');
     else{
       var counter;
       counter = id-9;
@@ -231,11 +243,12 @@ function knightMoves(el, id){
 
 function pawnMoves(el, id){
     $('.possible').removeClass('possible');
-    if (id>15) $('.board').addClass('possible');
+    if (id>15) $('.board').not('.hasPiece').addClass('possible');
     else{
       var counter;
         if (el.hasClass('up')){
           counter = id-4;
+          if (!($('#'+counter).hasClass('hasPiece')))
           $('#'+counter).addClass('possible');
           if (counter<4){
             el.removeClass('up');
@@ -243,6 +256,7 @@ function pawnMoves(el, id){
         }
         else{
           counter = id+4;
+          if (!($('#'+counter).hasClass('hasPiece')))
           $('#'+counter).addClass('possible');
           if (counter>11){
             el.addClass('up');
@@ -259,6 +273,9 @@ function deleteBoard(){
 
 // Used by the Restart button. Actually Deletes entire board than reloads it.
 function restart(){
+  $('.possible').removeClass('possible');
+  $('.selected').removeClass('selected');
+  $('.hasPiece').removeClass('hasPiece');
   deleteBoard();
   beginBoard();
 }
