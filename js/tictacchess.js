@@ -121,12 +121,7 @@ function rookMoves(el, id){
       var counter = id-4;
       while (counter>=0){
         if (($('#'+counter).hasClass('hasPiece'))){
-          if (el.attr('id').includes('w') && $('#'+counter).find('img').attr('id').includes('b')){
-            $('#'+counter).addClass('capture');
-          }
-          if (el.attr('id').includes('b') && $('#'+counter).find('img').attr('id').includes('w')){
-            $('#'+counter).addClass('capture');
-          }
+          captureTest(el,id,counter);
           break;
         }
         else{
@@ -138,12 +133,7 @@ function rookMoves(el, id){
       counter = id+4;
       while (counter<16){
         if (($('#'+counter).hasClass('hasPiece'))){
-          if (el.attr('id').includes('w') && $('#'+counter).find('img').attr('id').includes('b')){
-            $('#'+counter).addClass('capture');
-          }
-          if (el.attr('id').includes('b') && $('#'+counter).find('img').attr('id').includes('w')){
-            $('#'+counter).addClass('capture');
-          }
+          captureTest(el,id,counter);
           break;
         }
         else{
@@ -157,12 +147,7 @@ function rookMoves(el, id){
       counter = id-1;
       while((counter+4)%4!=3){
         if (($('#'+counter).hasClass('hasPiece'))){
-          if (el.attr('id').includes('w') && $('#'+counter).find('img').attr('id').includes('b')){
-            $('#'+counter).addClass('capture');
-          }
-          if (el.attr('id').includes('b') && $('#'+counter).find('img').attr('id').includes('w')){
-            $('#'+counter).addClass('capture');
-          }
+          captureTest(el,id,counter);
           break;
         }
         else{
@@ -174,12 +159,7 @@ function rookMoves(el, id){
       counter = id+1;
       while((counter+4)%4!=0){
         if (($('#'+counter).hasClass('hasPiece'))){
-          if (el.attr('id').includes('w') && $('#'+counter).find('img').attr('id').includes('b')){
-            $('#'+counter).addClass('capture');
-          }
-          if (el.attr('id').includes('b') && $('#'+counter).find('img').attr('id').includes('w')){
-            $('#'+counter).addClass('capture');
-          }
+          captureTest(el,id,counter);
           break;
         }
         else{
@@ -202,49 +182,73 @@ function bishopMoves(el, id){ //Will be extremely similar to rookMoves
 
       //Down right
       var counter = id+5;
-      while (counter<16 && !($('#'+counter).hasClass('hasPiece'))){
-        if (Math.floor(counter/4)-1 != rowCheck) break;
-        else{
-          rowCheck++;
-          $('#'+counter).addClass('possible');
+      while (counter<16){
+        if (($('#'+counter).hasClass('hasPiece'))){
+          captureTest(el,id,counter);
+          break;
         }
-        counter+=5;
+        else{
+            if (Math.floor(counter/4)-1 != rowCheck) break;
+            else{
+              rowCheck++;
+              $('#'+counter).addClass('possible');
+            }
+            counter+=5;
+          }
       }
 
       //Up left
       rowCheck = rowCheckBase;
       counter = id-5;
-      while(counter>-1 && !($('#'+counter).hasClass('hasPiece'))){
-        if (Math.floor(counter/4)+1 != rowCheck) break;
-        else{
-          rowCheck--;
-          $('#'+counter).addClass('possible');
+      while(counter>-1){
+        if (($('#'+counter).hasClass('hasPiece'))){
+          captureTest(el,id,counter);
+          break;
         }
-        counter-=5;
+        else{
+          if (Math.floor(counter/4)+1 != rowCheck) break;
+          else{
+            rowCheck--;
+            $('#'+counter).addClass('possible');
+          }
+          counter-=5;
+        }
       }
 
       //Down left
       rowCheck = rowCheckBase;
       counter = id+3;
-      while(counter<16 && !($('#'+counter).hasClass('hasPiece'))){
-        if (Math.floor(counter/4) == rowCheck) break;
-        else{
-          rowCheck++;
-          $('#'+counter).addClass('possible');
+      while(counter<16){
+        if (($('#'+counter).hasClass('hasPiece'))){
+          captureTest(el,id,counter);
+          break;
         }
-        counter+=3;
+        else{
+          if (Math.floor(counter/4) == rowCheck) break;
+          else{
+            rowCheck++;
+            $('#'+counter).addClass('possible');
+          }
+          counter+=3;
+        }
       }
 
       //Up right
       rowCheck = rowCheckBase;
       counter = id-3;
-      while(counter>-1 && !($('#'+counter).hasClass('hasPiece'))){
-        if (Math.floor(counter/4) == rowCheck) break;
-        else{
-          rowCheck--;
-          $('#'+counter).addClass('possible');
+      while(counter>-1){
+        if (($('#'+counter).hasClass('hasPiece'))){
+          captureTest(el,id,counter);
+          break;
         }
-        counter-=3;
+        else{
+          if (Math.floor(counter/4) == rowCheck) break;
+          else{
+            rowCheck--;
+            $('#'+counter).addClass('possible');
+          }
+          counter-=3;
+        }
       }
     }
 }
@@ -257,36 +261,36 @@ function knightMoves(el, id){
     else{
       var counter;
       counter = id-9;
-      if (id-9>-1 && Math.floor(id/4)-Math.floor((id-9)/4)==2 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
+      if (id-9>-1 && Math.floor(id/4)-Math.floor((id-9)/4)==2){
+        captureTest(el,id,counter);
       }
       counter = id-7;
-      if (id-7>-1 && Math.floor(id/4)-Math.floor((id-7)/4)==2 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
+      if (id-7>-1 && Math.floor(id/4)-Math.floor((id-7)/4)==2){
+        captureTest(el,id,counter);
       }
       counter = id-6;
-      if (id-6>-1 && Math.floor(id/4)-Math.floor((id-6)/4)==1 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
+      if (id-6>-1 && Math.floor(id/4)-Math.floor((id-6)/4)==1){
+        captureTest(el,id,counter);
       }
       counter = id-2;
-      if (id-2>-1 && Math.floor(id/4)-Math.floor((id-2)/4)==1 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
+      if (id-2>-1 && Math.floor(id/4)-Math.floor((id-2)/4)==1){
+        captureTest(el,id,counter);
       }
       counter = id+9;
-      if (id+9<16 && Math.floor(id/4)-Math.floor((id+9)/4)==-2 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
+      if (id+9<16 && Math.floor(id/4)-Math.floor((id+9)/4)==-2){
+        captureTest(el,id,counter);
       }
       counter = id+7;
-      if (id+7<16 && Math.floor(id/4)-Math.floor((id+7)/4)==-2 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
+      if (id+7<16 && Math.floor(id/4)-Math.floor((id+7)/4)==-2){
+        captureTest(el,id,counter);
       }
       counter = id+6;
-      if (id+6<16 && Math.floor(id/4)-Math.floor((id+6)/4)==-1 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
+      if (id+6<16 && Math.floor(id/4)-Math.floor((id+6)/4)==-1){
+        captureTest(el,id,counter);
       }
       counter = id+2;
-      if (id+2<16 && Math.floor(id/4)-Math.floor((id+2)/4)==-1 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
+      if (id+2<16 && Math.floor(id/4)-Math.floor((id+2)/4)==-1){
+        captureTest(el,id,counter);
       }
     }
 }
@@ -313,6 +317,7 @@ function pawnMoves(el, id){
             el.addClass('up');
           }
         }
+        captureTest(el,id,counter);
     }
 }
 
@@ -327,6 +332,48 @@ function restart(){
   $('.possible').removeClass('possible');
   $('.selected').removeClass('selected');
   $('.hasPiece').removeClass('hasPiece');
+  $('.possible').removeClass('possible');
   deleteBoard();
   beginBoard();
+}
+
+function captureTest(el,id,counter){
+  var imgID = el.attr('id');
+  if (imgID.includes('P')){
+    var newCount = counter-1;
+    if (Math.floor(counter/4) == Math.floor(newCount/4)){
+      if (($('#'+newCount).hasClass('hasPiece'))){
+        if (el.attr('id').includes('w') && $('#'+newCount).find('img').attr('id').includes('b')){
+          $('#'+newCount).addClass('capture');
+        }
+        if (el.attr('id').includes('b') && $('#'+newCount).find('img').attr('id').includes('w')){
+          $('#'+newCount).addClass('capture');
+        }
+      }
+    }
+    newCount+=2;
+    if (Math.floor(counter/4) == Math.floor(newCount/4)){
+      if (($('#'+newCount).hasClass('hasPiece'))){
+        if (el.attr('id').includes('w') && $('#'+newCount).find('img').attr('id').includes('b')){
+          $('#'+newCount).addClass('capture');
+        }
+        if (el.attr('id').includes('b') && $('#'+newCount).find('img').attr('id').includes('w')){
+          $('#'+newCount).addClass('capture');
+        }
+      }
+    }
+  }
+  else{
+    if (($('#'+counter).hasClass('hasPiece'))){
+      if (el.attr('id').includes('w') && $('#'+counter).find('img').attr('id').includes('b')){
+        $('#'+counter).addClass('capture');
+      }
+      if (el.attr('id').includes('b') && $('#'+counter).find('img').attr('id').includes('w')){
+        $('#'+counter).addClass('capture');
+      }
+    }
+    else{
+      $('#'+counter).addClass('possible');
+    }
+  }
 }
