@@ -29,7 +29,7 @@ function selectPiece(){
     var id = parseInt(this.id);
 
     // If another piece is already selected, make that piece unselected and select the new piece, get events from moveSelectedPiece().
-    //FIXME: We need to repeat the action of selecting more than one piece. Can only switch once.
+    
     if ($('.selected').length == 1) {
       if(!($(this).hasClass('selected'))) {
         $('.board').off();
