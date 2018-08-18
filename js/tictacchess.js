@@ -29,10 +29,12 @@ function selectPiece(){
     var id = parseInt(this.id);
 
     // If another piece is already selected, make that piece unselected and select the new piece, get events from moveSelectedPiece().
+    
     if ($('.selected').length == 1) {
       if(!($(this).hasClass('selected'))) {
         $('.board').off();
         $('.selected').removeClass('selected');
+        $('.possible').removeClass('possible');
         $(this).addClass('selected');
         moveSelectedPiece(el,id);
       }
@@ -40,6 +42,7 @@ function selectPiece(){
       // If we just double clicked on the same piece, unselect and remove the events.
       else{
         $(this).removeClass('selected');
+        $('.possible').removeClass('possible');
         $('th').off();
         selectPiece();
       }
@@ -56,6 +59,7 @@ function selectPiece(){
 // Currently, this function just takes the image passed to it, and moves it to the board. ****NEEDS TO BE MORE SELECTIVE. WE NEED TO START BY FINDING OUT WHICH PIECE IT IS, AND THEN BASED ON THAT PIECE, WE NEED TO FIGURE OUT THE POSSIBLE SQUARES THAT THAT PIECE CAN MOVE.
 function moveSelectedPiece(el,id){
   possibleSquares(el,id);
+  $('th.hasPiece').on('click', selectPiece());
   $('th.possible').not('.hasPiece').on('click', function(){
     $(this).addClass('hasPiece');
     $(this).prepend(el);
@@ -72,16 +76,16 @@ function possibleSquares(el,id){
   var imgID = el.attr('id');
 
   if (imgID.includes('P')){
-      pawnMoves(id);
+      pawnMoves(el, id);
   }
   if (imgID.includes('R')){
       rookMoves(el, id);
   }
   if (imgID.includes('N')){
-      knightMoves(id);
+      knightMoves(el, id);
   }
   if (imgID.includes('B')){
-      bishopMoves(id);
+      bishopMoves(el, id);
   }
 }
 
@@ -92,6 +96,7 @@ ALSO THE ROOK CAN MOVE TO SQUARES WITH THE SAME X%4 (CAN BE 0,1,2,3)
 */
 
 function rookMoves(el, id){
+    $('.possible').removeClass('possible');
     if (id>15) $('.board').addClass('possible'); //Be able to place rook anywhere to start
     else {
 
@@ -125,7 +130,10 @@ function rookMoves(el, id){
     }
 }
 
-function bishopMoves(id){ //Will be extremely similar to rookMoves
+
+//Creates possible squares for bishop moves.
+function bishopMoves(el, id){ //Will be extremely similar to rookMoves
+    $('.possible').removeClass('possible');
     if (id>15) $('.board').addClass('possible');
     else{
       var rowCheckBase = Math.floor(id/4); //This will help us with wrap around errors
@@ -180,12 +188,67 @@ function bishopMoves(id){ //Will be extremely similar to rookMoves
     }
 }
 
-function knightMoves(id){
-    $('th.board').addClass('possible');
+//Creates possible squares for knight moves.
+function knightMoves(el, id){
+    $('.possible').removeClass('possible');
+    if (id>15) $('.board').addClass('possible');
+    else{
+      var counter;
+      counter = id-9;
+      if (id-9>-1 && Math.floor(id/4)-Math.floor((id-9)/4)==2 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+      }
+      counter = id-7;
+      if (id-7>-1 && Math.floor(id/4)-Math.floor((id-7)/4)==2 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+      }
+      counter = id-6;
+      if (id-6>-1 && Math.floor(id/4)-Math.floor((id-6)/4)==1 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+      }
+      counter = id-2;
+      if (id-2>-1 && Math.floor(id/4)-Math.floor((id-2)/4)==1 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+      }
+      counter = id+9;
+      if (id+9<16 && Math.floor(id/4)-Math.floor((id+9)/4)==-2 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+      }
+      counter = id+7;
+      if (id+7<16 && Math.floor(id/4)-Math.floor((id+7)/4)==-2 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+      }
+      counter = id+6;
+      if (id+6<16 && Math.floor(id/4)-Math.floor((id+6)/4)==-1 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+      }
+      counter = id+2;
+      if (id+2<16 && Math.floor(id/4)-Math.floor((id+2)/4)==-1 && !($('#'+counter).hasClass('hasPiece'))){
+        $('#'+counter).addClass('possible');
+      }
+    }
 }
 
-function pawnMoves(id){
-    $('th.board').addClass('possible');
+function pawnMoves(el, id){
+    $('.possible').removeClass('possible');
+    if (id>15) $('.board').addClass('possible');
+    else{
+      var counter;
+        if (el.hasClass('up')){
+          counter = id-4;
+          $('#'+counter).addClass('possible');
+          if (counter<4){
+            el.removeClass('up');
+          }
+        }
+        else{
+          counter = id+4;
+          $('#'+counter).addClass('possible');
+          if (counter>11){
+            el.addClass('up');
+          }
+        }
+    }
 }
 
 // Used for the Delete Button. Removes all images and events.
