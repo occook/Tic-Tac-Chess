@@ -119,7 +119,7 @@ function rookMoves(el, id){
       counter = id-1;
       while((counter+4)%4!=3 && !($('#'+counter).hasClass('hasPiece'))){
         $('#'+counter).addClass('possible');
-        counter-=1;
+        counter--;
       }
       //Now we will check right.
       counter = id+1;
