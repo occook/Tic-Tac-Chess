@@ -35,6 +35,7 @@ function selectPiece(){
         $('.board').off();
         $('.selected').removeClass('selected');
         $('.possible').removeClass('possible');
+        $('.capture').removeClass('capture');
         $(this).addClass('selected');
         moveSelectedPiece(el,id);
       }
@@ -43,6 +44,7 @@ function selectPiece(){
       else{
         $(this).removeClass('selected');
         $('.possible').removeClass('possible');
+        $('.capture').removeClass('capture');
         $('th').off();
         selectPiece();
       }
@@ -78,6 +80,7 @@ function moveSelectedPiece(el,id){
     $('th').off();
     $('.selected').removeClass('selected').removeClass('hasPiece');
     $('.possible').removeClass('possible');
+    $('.capture').removeClass('capture');
     selectPiece();
   });
 }
@@ -109,35 +112,80 @@ ALSO THE ROOK CAN MOVE TO SQUARES WITH THE SAME X%4 (CAN BE 0,1,2,3)
 
 function rookMoves(el, id){
     $('.possible').removeClass('possible');
+    $('.capture').removeClass('capture');
     if (id>15) $('.board').not('.hasPiece').addClass('possible'); //Be able to place rook anywhere to start
     else {
 
       //Deal with possible squares in same column.
       //First we check up. If we run into square that has a piece, we stop because we can't go through that piece.
       var counter = id-4;
-      while (counter>=0 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
-        counter-=4;
+      while (counter>=0){
+        if (($('#'+counter).hasClass('hasPiece'))){
+          if (el.attr('id').includes('w') && $('#'+counter).find('img').attr('id').includes('b')){
+            $('#'+counter).addClass('capture');
+          }
+          if (el.attr('id').includes('b') && $('#'+counter).find('img').attr('id').includes('w')){
+            $('#'+counter).addClass('capture');
+          }
+          break;
+        }
+        else{
+          $('#'+counter).addClass('possible');
+          counter-=4;
+        }
       }
       //Now we do the same but for down.
       counter = id+4;
-      while (counter<16 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
-        counter+=4;
+      while (counter<16){
+        if (($('#'+counter).hasClass('hasPiece'))){
+          if (el.attr('id').includes('w') && $('#'+counter).find('img').attr('id').includes('b')){
+            $('#'+counter).addClass('capture');
+          }
+          if (el.attr('id').includes('b') && $('#'+counter).find('img').attr('id').includes('w')){
+            $('#'+counter).addClass('capture');
+          }
+          break;
+        }
+        else{
+            $('#'+counter).addClass('possible');
+            counter+=4;
+        }
       }
 
       //Deal with possible squares in same row.
       //First we will check left. We will stop when counter%4=3
       counter = id-1;
-      while((counter+4)%4!=3 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
-        counter--;
+      while((counter+4)%4!=3){
+        if (($('#'+counter).hasClass('hasPiece'))){
+          if (el.attr('id').includes('w') && $('#'+counter).find('img').attr('id').includes('b')){
+            $('#'+counter).addClass('capture');
+          }
+          if (el.attr('id').includes('b') && $('#'+counter).find('img').attr('id').includes('w')){
+            $('#'+counter).addClass('capture');
+          }
+          break;
+        }
+        else{
+          $('#'+counter).addClass('possible');
+          counter--;
+        }
       }
       //Now we will check right.
       counter = id+1;
-      while((counter+4)%4!=0 && !($('#'+counter).hasClass('hasPiece'))){
-        $('#'+counter).addClass('possible');
-        counter+=1;
+      while((counter+4)%4!=0){
+        if (($('#'+counter).hasClass('hasPiece'))){
+          if (el.attr('id').includes('w') && $('#'+counter).find('img').attr('id').includes('b')){
+            $('#'+counter).addClass('capture');
+          }
+          if (el.attr('id').includes('b') && $('#'+counter).find('img').attr('id').includes('w')){
+            $('#'+counter).addClass('capture');
+          }
+          break;
+        }
+        else{
+          $('#'+counter).addClass('possible');
+          counter+=1;
+        }
       }
     }
 }
@@ -146,6 +194,7 @@ function rookMoves(el, id){
 //Creates possible squares for bishop moves.
 function bishopMoves(el, id){ //Will be extremely similar to rookMoves
     $('.possible').removeClass('possible');
+    $('.capture').removeClass('capture');
     if (id>15) $('.board').not('.hasPiece').addClass('possible');
     else{
       var rowCheckBase = Math.floor(id/4); //This will help us with wrap around errors
@@ -203,6 +252,7 @@ function bishopMoves(el, id){ //Will be extremely similar to rookMoves
 //Creates possible squares for knight moves.
 function knightMoves(el, id){
     $('.possible').removeClass('possible');
+    $('.capture').removeClass('capture');
     if (id>15) $('.board').not('.hasPiece').addClass('possible');
     else{
       var counter;
@@ -243,6 +293,7 @@ function knightMoves(el, id){
 
 function pawnMoves(el, id){
     $('.possible').removeClass('possible');
+    $('.capture').removeClass('capture');
     if (id>15) $('.board').not('.hasPiece').addClass('possible');
     else{
       var counter;
