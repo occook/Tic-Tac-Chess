@@ -29,10 +29,12 @@ function selectPiece(){
     var id = parseInt(this.id);
 
     // If another piece is already selected, make that piece unselected and select the new piece, get events from moveSelectedPiece().
+    //FIXME: We need to repeat the action of selecting more than one piece. Can only switch once.
     if ($('.selected').length == 1) {
       if(!($(this).hasClass('selected'))) {
         $('.board').off();
         $('.selected').removeClass('selected');
+        $('.possible').removeClass('possible');
         $(this).addClass('selected');
         moveSelectedPiece(el,id);
       }
@@ -40,6 +42,7 @@ function selectPiece(){
       // If we just double clicked on the same piece, unselect and remove the events.
       else{
         $(this).removeClass('selected');
+        $('.possible').removeClass('possible');
         $('th').off();
         selectPiece();
       }
@@ -56,6 +59,7 @@ function selectPiece(){
 // Currently, this function just takes the image passed to it, and moves it to the board. ****NEEDS TO BE MORE SELECTIVE. WE NEED TO START BY FINDING OUT WHICH PIECE IT IS, AND THEN BASED ON THAT PIECE, WE NEED TO FIGURE OUT THE POSSIBLE SQUARES THAT THAT PIECE CAN MOVE.
 function moveSelectedPiece(el,id){
   possibleSquares(el,id);
+  $('th.hasPiece').on('click', selectPiece());
   $('th.possible').not('.hasPiece').on('click', function(){
     $(this).addClass('hasPiece');
     $(this).prepend(el);
@@ -72,16 +76,16 @@ function possibleSquares(el,id){
   var imgID = el.attr('id');
 
   if (imgID.includes('P')){
-      pawnMoves(id);
+      pawnMoves(el, id);
   }
   if (imgID.includes('R')){
-      rookMoves(id);
+      rookMoves(el, id);
   }
   if (imgID.includes('N')){
-      knightMoves(id);
+      knightMoves(el, id);
   }
   if (imgID.includes('B')){
-      bishopMoves(id);
+      bishopMoves(el, id);
   }
 }
 
@@ -91,7 +95,8 @@ ROOK MOVES: ROOK CAN MOVE IN ROW AND COLUMN. THIS MEANS THAT ROOK CAN MOVE WITHI
 ALSO THE ROOK CAN MOVE TO SQUARES WITH THE SAME X%4 (CAN BE 0,1,2,3)
 */
 
-function rookMoves(id){
+function rookMoves(el, id){
+    $('.possible').removeClass('possible');
     if (id>15) $('.board').addClass('possible'); //Be able to place rook anywhere to start
     else {
 
@@ -127,7 +132,8 @@ function rookMoves(id){
 
 
 //Creates possible squares for bishop moves.
-function bishopMoves(id){ //Will be extremely similar to rookMoves
+function bishopMoves(el, id){ //Will be extremely similar to rookMoves
+    $('.possible').removeClass('possible');
     if (id>15) $('.board').addClass('possible');
     else{
       var rowCheckBase = Math.floor(id/4); //This will help us with wrap around errors
@@ -183,7 +189,8 @@ function bishopMoves(id){ //Will be extremely similar to rookMoves
 }
 
 //Creates possible squares for knight moves.
-function knightMoves(id){
+function knightMoves(el, id){
+    $('.possible').removeClass('possible');
     if (id>15) $('.board').addClass('possible');
     else{
       var counter;
@@ -222,8 +229,26 @@ function knightMoves(id){
     }
 }
 
-function pawnMoves(id){
-    $('th.board').addClass('possible');
+function pawnMoves(el, id){
+    $('.possible').removeClass('possible');
+    if (id>15) $('.board').addClass('possible');
+    else{
+      var counter;
+        if (el.hasClass('up')){
+          counter = id-4;
+          $('#'+counter).addClass('possible');
+          if (counter<4){
+            el.removeClass('up');
+          }
+        }
+        else{
+          counter = id+4;
+          $('#'+counter).addClass('possible');
+          if (counter>11){
+            el.addClass('up');
+          }
+        }
+    }
 }
 
 // Used for the Delete Button. Removes all images and events.
