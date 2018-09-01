@@ -6,6 +6,7 @@
 var holderList = $('.holder');
 var squareList = $('th');
 var pieceList = ['bB','bN','bP','bR','wB','wN','wP','wR'];
+var turn = true;
 
 //Initialize and bind events to buttons below the playing board.
 var restartButton = $('#restart').on('click', restart);
@@ -14,7 +15,8 @@ var deleteButton = $('#delete').on('click', deleteBoard);
 //Function for the restart button. Restarts the game. Creates board in for loop, then allows for pieces to be moved with allowSelectPiece().
 function beginBoard(){
   for (var i=0; i<holderList.length; i++){
-    holderList[i].innerHTML = '<img id= '+pieceList[i]+' src=\"images/'+pieceList[i]+'.png\"/>';
+    if (i<4) holderList[i].innerHTML = '<img id= '+pieceList[i]+' class=black src=\"images/'+pieceList[i]+'.png\"/>';
+    else holderList[i].innerHTML = '<img id= '+pieceList[i]+' class=white src=\"images/'+pieceList[i]+'.png\"/>';
   }
   selectPiece();
 }
@@ -22,40 +24,8 @@ function beginBoard(){
 //This messy function basically causes the background of any board square to turn yellow when clicked. It will then "select" that square, and take note of the image that is in that square. Will pass the image into the moveSelectedPiece() function.
 
 function selectPiece(){
-
-  $('th:has(img)').on('click',function() {
-
-    var el = $(this).find('img'); //Find the image that is being selected, store in el.
-    var id = parseInt(this.id);
-
-    // If another piece is already selected, make that piece unselected and select the new piece, get events from moveSelectedPiece().
-
-    if ($('.selected').length == 1) {
-      if(!($(this).hasClass('selected'))) {
-        $('.board').off();
-        $('.selected').removeClass('selected');
-        $('.possible').removeClass('possible');
-        $('.capture').removeClass('capture');
-        $(this).addClass('selected');
-        moveSelectedPiece(el,id);
-      }
-
-      // If we just double clicked on the same piece, unselect and remove the events.
-      else{
-        $(this).removeClass('selected');
-        $('.possible').removeClass('possible');
-        $('.capture').removeClass('capture');
-        $('th').off();
-        selectPiece();
-      }
-    }
-
-    // No piece has been selected yet, so select a piece and get events from moveSelectedPiece().
-    else{
-      $(this).addClass('selected');
-      moveSelectedPiece(el,id);
-    }
-  });
+  if (turn) $('th:has(img.white)').on('click', selectPieceFunction);
+  else $('th:has(img.black)').on('click', selectPieceFunction);
 }
 
 // Currently, this function just takes the image passed to it, and moves it to the board. ****NEEDS TO BE MORE SELECTIVE. WE NEED TO START BY FINDING OUT WHICH PIECE IT IS, AND THEN BASED ON THAT PIECE, WE NEED TO FIGURE OUT THE POSSIBLE SQUARES THAT THAT PIECE CAN MOVE.
@@ -81,6 +51,7 @@ function moveSelectedPiece(el,id){
     $('.selected').removeClass('selected').removeClass('hasPiece');
     $('.possible').removeClass('possible');
     $('.capture').removeClass('capture');
+    turn = !turn;
     selectPiece();
   });
 
@@ -107,6 +78,7 @@ function moveSelectedPiece(el,id){
         $('#'+count).prepend(moveToHolder);
       }
     }
+    turn = !turn;
     selectPiece();
   });
 }
@@ -402,5 +374,38 @@ function captureTest(el,id,counter){
     else{
       $('#'+counter).addClass('possible');
     }
+  }
+}
+
+function selectPieceFunction(){
+  var el = $(this).find('img'); //Find the image that is being selected, store in el.
+  var id = parseInt(this.id);
+
+  // If another piece is already selected, make that piece unselected and select the new piece, get events from moveSelectedPiece().
+
+  if ($('.selected').length == 1) {
+    if(!($(this).hasClass('selected'))) {
+      $('.board').off();
+      $('.selected').removeClass('selected');
+      $('.possible').removeClass('possible');
+      $('.capture').removeClass('capture');
+      $(this).addClass('selected');
+      moveSelectedPiece(el,id);
+    }
+
+    // If we just double clicked on the same piece, unselect and remove the events.
+    else{
+      $(this).removeClass('selected');
+      $('.possible').removeClass('possible');
+      $('.capture').removeClass('capture');
+      $('th').off();
+      selectPiece();
+    }
+  }
+
+  // No piece has been selected yet, so select a piece and get events from moveSelectedPiece().
+  else{
+    $(this).addClass('selected');
+    moveSelectedPiece(el,id);
   }
 }
