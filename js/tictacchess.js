@@ -108,7 +108,6 @@ function moveSelectedPiece(el,id){
       }
     }
     selectPiece();
-
   });
 }
 
