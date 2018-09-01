@@ -83,6 +83,20 @@ function moveSelectedPiece(el,id){
     $('.capture').removeClass('capture');
     selectPiece();
   });
+
+  //Capture piece function.
+  $('.capture').on('click', function(){
+    var moveToHolder = this.firstChild;
+    this.removeChild(this.firstChild);
+    $(this).prepend(el);
+    $('#'+id).removeClass('hasPiece');
+    $('th').off();
+    $('.selected').removeClass('selected').removeClass('hasPiece');
+    $('.possible').removeClass('possible');
+    $('.capture').removeClass('capture');
+    selectPiece();
+
+  });
 }
 
 
@@ -172,6 +186,7 @@ function rookMoves(el, id){
 
 
 //Creates possible squares for bishop moves.
+//FIXME: Bishop wrap around error occurs only on capture, not on possible.
 function bishopMoves(el, id){ //Will be extremely similar to rookMoves
     $('.possible').removeClass('possible');
     $('.capture').removeClass('capture');
@@ -183,7 +198,7 @@ function bishopMoves(el, id){ //Will be extremely similar to rookMoves
       //Down right
       var counter = id+5;
       while (counter<16){
-        if (($('#'+counter).hasClass('hasPiece'))){
+        if (($('#'+counter).hasClass('hasPiece')) && Math.floor(counter/4)-1 == rowCheck){
           captureTest(el,id,counter);
           break;
         }
@@ -201,7 +216,7 @@ function bishopMoves(el, id){ //Will be extremely similar to rookMoves
       rowCheck = rowCheckBase;
       counter = id-5;
       while(counter>-1){
-        if (($('#'+counter).hasClass('hasPiece'))){
+        if (($('#'+counter).hasClass('hasPiece')) && Math.floor(counter/4)+1 == rowCheck){
           captureTest(el,id,counter);
           break;
         }
@@ -219,7 +234,7 @@ function bishopMoves(el, id){ //Will be extremely similar to rookMoves
       rowCheck = rowCheckBase;
       counter = id+3;
       while(counter<16){
-        if (($('#'+counter).hasClass('hasPiece'))){
+        if (($('#'+counter).hasClass('hasPiece')) && Math.floor(counter/4) != rowCheck){
           captureTest(el,id,counter);
           break;
         }
@@ -237,7 +252,7 @@ function bishopMoves(el, id){ //Will be extremely similar to rookMoves
       rowCheck = rowCheckBase;
       counter = id-3;
       while(counter>-1){
-        if (($('#'+counter).hasClass('hasPiece'))){
+        if (($('#'+counter).hasClass('hasPiece')) && Math.floor(counter/4) != rowCheck){
           captureTest(el,id,counter);
           break;
         }
