@@ -94,6 +94,19 @@ function moveSelectedPiece(el,id){
     $('.selected').removeClass('selected').removeClass('hasPiece');
     $('.possible').removeClass('possible');
     $('.capture').removeClass('capture');
+
+    //Move to holder
+    var imgID;
+    if (moveToHolder.id.includes('b')) imgID = 16;
+    else imgID = 20;
+
+    var count;
+    for (var i=0; i<4; i++){
+      count = imgID+i;
+      if ($('#'+count).children().length == 0){
+        $('#'+count).prepend(moveToHolder);
+      }
+    }
     selectPiece();
 
   });
