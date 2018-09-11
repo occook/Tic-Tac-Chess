@@ -7,6 +7,7 @@ var holderList = $('.holder');
 var squareList = $('th');
 var pieceList = ['bB','bN','bP','bR','wB','wN','wP','wR'];
 var turn = true;
+var threePieceRule = 0;
 
 //Initialize and bind events to buttons below the playing board.
 var restartButton = $('#restart').on('click', restart);
@@ -26,6 +27,38 @@ function beginBoard(){
 function selectPiece(){
   if (turn) $('th:has(img.white)').on('click', selectPieceFunction);
   else $('th:has(img.black)').on('click', selectPieceFunction);
+}
+function selectPieceFunction(){
+  var el = $(this).find('img'); //Find the image that is being selected, store in el.
+  var id = parseInt(this.id);
+
+  // If another piece is already selected, make that piece unselected and select the new piece, get events from moveSelectedPiece().
+
+  if ($('.selected').length == 1) {
+    if(!($(this).hasClass('selected'))) {
+      $('.board').off();
+      $('.selected').removeClass('selected');
+      $('.possible').removeClass('possible');
+      $('.capture').removeClass('capture');
+      $(this).addClass('selected');
+      moveSelectedPiece(el,id);
+    }
+
+    // If we just double clicked on the same piece, unselect and remove the events.
+    else{
+      $(this).removeClass('selected');
+      $('.possible').removeClass('possible');
+      $('.capture').removeClass('capture');
+      $('th').off();
+      selectPiece();
+    }
+  }
+
+  // No piece has been selected yet, so select a piece and get events from moveSelectedPiece().
+  else if (!(this.id<16 && threePieceRule<6)){
+    $(this).addClass('selected');
+    moveSelectedPiece(el,id);
+  }
 }
 
 // Currently, this function just takes the image passed to it, and moves it to the board. ****NEEDS TO BE MORE SELECTIVE. WE NEED TO START BY FINDING OUT WHICH PIECE IT IS, AND THEN BASED ON THAT PIECE, WE NEED TO FIGURE OUT THE POSSIBLE SQUARES THAT THAT PIECE CAN MOVE.
@@ -52,6 +85,8 @@ function moveSelectedPiece(el,id){
     $('.possible').removeClass('possible');
     $('.capture').removeClass('capture');
     turn = !turn;
+    threePieceRule++;
+    winner();
     selectPiece();
   });
 
@@ -79,6 +114,8 @@ function moveSelectedPiece(el,id){
       }
     }
     turn = !turn;
+    threePieceRule++;
+    winner();
     selectPiece();
   });
 }
@@ -170,7 +207,7 @@ function rookMoves(el, id){
 
 
 //Creates possible squares for bishop moves.
-//FIXME: Bishop wrap around error occurs only on capture, not on possible.
+
 function bishopMoves(el, id){ //Will be extremely similar to rookMoves
     $('.possible').removeClass('possible');
     $('.capture').removeClass('capture');
@@ -332,6 +369,7 @@ function restart(){
   $('.selected').removeClass('selected');
   $('.hasPiece').removeClass('hasPiece');
   $('.possible').removeClass('possible');
+  turn = true;
   deleteBoard();
   beginBoard();
 }
@@ -377,35 +415,98 @@ function captureTest(el,id,counter){
   }
 }
 
-function selectPieceFunction(){
-  var el = $(this).find('img'); //Find the image that is being selected, store in el.
-  var id = parseInt(this.id);
-
-  // If another piece is already selected, make that piece unselected and select the new piece, get events from moveSelectedPiece().
-
-  if ($('.selected').length == 1) {
-    if(!($(this).hasClass('selected'))) {
-      $('.board').off();
-      $('.selected').removeClass('selected');
-      $('.possible').removeClass('possible');
-      $('.capture').removeClass('capture');
-      $(this).addClass('selected');
-      moveSelectedPiece(el,id);
-    }
-
-    // If we just double clicked on the same piece, unselect and remove the events.
-    else{
-      $(this).removeClass('selected');
-      $('.possible').removeClass('possible');
-      $('.capture').removeClass('capture');
-      $('th').off();
-      selectPiece();
+function winner(){
+  var color;
+  var colorCounter = 0;
+  //Vertical, go through each square on top row.
+  for (var i=0; i<4; i++){
+    var elID = $('#'+i).find('img').attr('id'); // Find the ID of image in square.
+    if (elID){ //Deals with undefined errors
+      if(elID.includes('w')) color='w'; //Set color that we are looking for.
+      else color = 'b';
+      for (var j=i+4; j<16; j+=4){
+        var nextID = $('#'+j).find('img').attr('id')
+        if (nextID){ //Deals with undefined errors
+          if (!nextID.includes(color)) { //See if the color matches. If it does, keep moving down, else break.
+            colorCounter = 0;
+            break; //Color is not the same, no point in checking winner.
+          }
+          else {
+            colorCounter++;
+          }
+        }
+      }
+      if (colorCounter == 3) alert(color+" wins!"); //If the color counter ever gets to this, we know that there is a winner.
+      colorCounter = 0;
     }
   }
 
-  // No piece has been selected yet, so select a piece and get events from moveSelectedPiece().
-  else{
-    $(this).addClass('selected');
-    moveSelectedPiece(el,id);
+  //Horizontal, go through each square on left, and go across.
+  for (var i=0; i<13; i+=4){
+    var elID = $('#'+i).find('img').attr('id'); // Find the ID of image in square.
+    if (elID){ //Deals with undefined errors
+      if(elID.includes('w')) color='w'; //Set color that we are looking for.
+      else color = 'b';
+      for (var j=i+1; j<i+4; j++){
+        var nextID = $('#'+j).find('img').attr('id')
+        if (nextID){ //Deals with undefined errors
+          if (!nextID.includes(color)) { //See if the color matches. If it does, keep moving down, else break.
+            colorCounter = 0;
+            break; //Color is not the same, no point in checking winner.
+          }
+          else {
+            colorCounter++;
+          }
+        }
+      }
+      if (colorCounter == 3) alert(color+" wins!"); //If the color counter ever gets to this, we know that there is a winner.
+      colorCounter = 0;
+    }
+  }
+
+  //Diagonal
+
+  //Upper Left to Bottom Right
+  var elID = $('#0').find('img').attr('id');
+  if (elID){
+    if(elID.includes('w')) color='w'; //Set color that we are looking for.
+    else color = 'b';
+
+    for (var i=5; i<16; i+=5){
+      var nextID = $('#'+i).find('img').attr('id')
+      if (nextID){ //Deals with undefined errors
+        if (!nextID.includes(color)) { //See if the color matches. If it does, keep moving down, else break.
+          colorCounter = 0;
+          break; //Color is not the same, no point in checking winner.
+        }
+        else {
+          colorCounter++;
+        }
+      }
+    }
+    if (colorCounter == 3) alert(color+" wins!"); //If the color counter ever gets to this, we know that there is a winner.
+    colorCounter = 0;
+  }
+
+  //Upper Right to Bottom Left
+  var elID = $('#3').find('img').attr('id');
+  if (elID){
+    if(elID.includes('w')) color='w'; //Set color that we are looking for.
+    else color = 'b';
+
+    for (var i=6; i<13; i+=3){
+      var nextID = $('#'+i).find('img').attr('id')
+      if (nextID){ //Deals with undefined errors
+        if (!nextID.includes(color)) { //See if the color matches. If it does, keep moving down, else break.
+          colorCounter = 0;
+          break; //Color is not the same, no point in checking winner.
+        }
+        else {
+          colorCounter++;
+        }
+      }
+    }
+    if (colorCounter == 3) alert(color+" wins!"); //If the color counter ever gets to this, we know that there is a winner.
+    colorCounter = 0;
   }
 }
